@@ -1,0 +1,146 @@
+#:kivy 2.0.0
+<loginScreen>:
+    orientation: 'vertical'
+    in_class: lecturerid
+    in_class1: lecturer_password
+    size_hint: (1,1)
+    MDToolbar:
+        pos_hint: {'top':1.0}
+        title: 'Login'
+        right_action_items: [["close",lambda x: app.close_action()]]
+    MDTextField:
+        id: lecturerid
+        hint_text: "Username"
+        required: True
+        size_hint_x:.8
+        pos_hint: {'center_x': .5,'center_y': .8}
+    MDTextField:
+        hint_text: "Password"
+        id: lecturer_password
+        password: True
+        required: True
+        size_hint_x:.8
+        pos_hint: {'center_x': .5,'center_y': .7}
+    MDRectangleFlatButton:
+        text: 'Login'
+        on_release: root.login_button_action()
+        pos_hint: {'center_x': .5,'center_y': .5}
+    
+<homeScreen>:
+    orientation: 'vertical'
+    in_class2: course_now
+    MDToolbar:
+        pos_hint: {'top':1.0}
+        title: 'Home'
+        right_action_items: [["close",lambda x: app.close_action()]]
+    MDTextField:
+        id: course_now
+        hint_text: "Course Code"
+        required: True
+        size_hint_x:.7
+        pos_hint: {'center_x': .5,'center_y': .7}
+        
+    MDFillRoundFlatButton:
+        text: 'Take Attendance'
+        on_release: root.beam_button_action()
+        pos_hint: {'center_x': .5,'center_y': .5}
+                
+    MDRectangleFlatButton:
+        text: 'Get Report'
+        on_release: root.report_button_action()
+        pos_hint: {'center_x': .5,'center_y': .3}
+                
+<attendanceScreen>:
+    MDToolbar:
+        pos_hint: {'top':1.0}
+        title: 'Attendance'
+        left_action_items: [["arrow-left",lambda x: root.backbtn()]]
+        right_action_items: [["home",lambda x: root.menu_action()]]
+    MDLabel:
+        text: "Tap phone to mark Attendance"
+        halign: "center"
+       
+<reportHomeScreen>:
+    orientation: 'vertical'
+    
+    MDToolbar:
+        pos_hint: {'top':1.0}
+        title: 'Reports'
+        left_action_items: [["arrow-left",lambda x: root.backbtn()]]
+        right_action_items: [["home",lambda x: root.menu_action()]]
+
+    MDRectangleFlatButton:
+    	text: 'Class Attendance'
+        on_release: root.classAtt_button_action()
+        pos_hint: {'center_x': .5,'center_y': .7}
+
+    MDRectangleFlatButton:
+        text: 'Covid Contacts'
+        on_release: root.covContacts_button_action()
+        pos_hint: {'center_x': .5,'center_y': .5}
+
+<covidContactsScreen>:
+    orientation: 'vertical'
+    in_class3: c_date
+    in_class4: stid
+    size_hint: (1,1)
+    MDToolbar:
+        pos_hint: {'top':1.0}
+        title: 'Covid Contacts'
+        left_action_items: [["arrow-left",lambda x: root.backbtn()]]
+        right_action_items: [["home",lambda x: root.menu_action()]]
+    MDTextField:
+        hint_text: "Date"
+        helper_text: "in the format: YYYY-MM-DD"
+        helper_text_mode: "on_focus"
+        id: c_date
+        size_hint_x:.8
+        pos_hint: {'center_x': .5,'center_y': .8}
+    MDTextField:
+        hint_text: "Student ID"
+        id: stid
+        size_hint_x:.8
+        pos_hint: {'center_x': .5,'center_y': .7}    
+    MDRectangleFlatButton:
+        text: 'go'
+        on_release: root.go_button_action()
+        pos_hint: {'center_x': .5,'center_y': .4}
+            
+<classAttScreen>:
+    orientation: 'vertical'
+
+    MDToolbar:
+        pos_hint: {'top':1.0}
+        title: 'Class Attendance'
+        left_action_items: [["arrow-left",lambda x: root.backbtn()]]
+        right_action_items: [["home",lambda x: root.menu_action()]]
+    MDRectangleFlatButton:
+        text: 'Class list'
+        on_press: root.classList_button_action()
+        pos_hint: {'center_x': .5,'center_y': .7}
+    MDRectangleFlatButton:
+        text: 'Individual list'
+        on_release: root.individualList_button_action()
+        pos_hint: {'center_x': .5,'center_y': .5}
+
+<individualRepScreen>:
+    orientation: 'vertical'
+    size_hint: (1,1)
+    
+    MDToolbar:
+        pos_hint: {'top':1.0}
+        title: 'Individual Report'
+        left_action_items: [["arrow-left",lambda x: root.backbtn()]]
+        right_action_items: [["home",lambda x: root.menu_action()]]
+    MDTextField:
+        hint_text: "Student ID"
+        helper_text: "for student interested in"
+        helper_text_mode: "on_focus"
+        size_hint_x: .8
+        id: studentid
+        pos_hint: {'center_x': .5,'center_y': .7}
+        icon_left: "magnify"
+    MDRectangleFlatButton:
+        text: 'view report'
+        on_release: root.vwrpt_button_action()
+        pos_hint: {'center_x': .5,'center_y': .4}

@@ -1,10 +1,10 @@
 [app]
 
 # (str) Title of your application
-title = CaZ
+title = LctApp
 
 # (str) Package name
-package.name = app
+package.name = lctapp
 
 # (str) Package domain (needed for android/ios packaging)
 package.domain = org.kivy
@@ -28,7 +28,7 @@ source.include_exts = py,png,jpg,kv,atlas
 #source.exclude_patterns = license,images/*/*.jpg
 
 # (str) Application versioning (method 1)
-version = 1.5
+version = 1.2
 
 # (str) Application versioning (method 2)
 # version.regex = __version__ = ['"](.*)['"]
@@ -36,13 +36,11 @@ version = 1.5
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy==2.0.0,kivymd==0.104.2,sdl2_ttf==2.0.15,pillow,mysql-connector-python,nfcpy,ndeflib,libusb1
+requirements = python3,kivy==2.0.0,kivymd==0.104.2,sdl2_ttf==2.0.15,pillow,mysql-connector-python,android
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
-#requirements.source.libusb1 = /home/camcz/p38k200/lib/python3.8/site-packages
-requirements.source.nfcpy = /home/camcz/p38k200/lib/python3.8/site-packages/nfc
-requirements.source.ndeflib = /home/camcz/p38k200/lib/python3.8/site-packages/ndef
+# requirements.source.kivy = ../../kivy
 
 # (list) Garden requirements
 #garden_requirements =
@@ -51,7 +49,7 @@ requirements.source.ndeflib = /home/camcz/p38k200/lib/python3.8/site-packages/nd
 presplash.filename = %(source.dir)s/data/load-icon1.png
 
 # (str) Icon of the application
-icon.filename = %(source.dir)s/data/icon1.PNG
+icon.filename = %(source.dir)s/data/icon2.PNG
 
 # (str) Supported orientation (one of landscape, sensorLandscape, portrait or all)
 orientation = portrait
@@ -87,7 +85,9 @@ fullscreen = 0
 #android.presplash_color = #FFFFFF
 
 # (list) Permissions
-android.permissions = INTERNET
+#READ_EXTERNAL_STORAGE,MANAGE_EXTERNAL_STORAGE,
+android.permissions = INTERNET,WRITE_EXTERNAL_STORAGE,WAKE_LOCK,READ_EXTERNAL_STORAGE
+
 
 # (int) Target Android API, should be as high as possible.
 android.api = 30
@@ -108,13 +108,13 @@ android.ndk_api = 21
 android.private_storage = True
 
 # (str) Android NDK directory (if empty, it will be automatically downloaded.)
-android.ndk_path = /home/camcz/.buildozer/android/platform/android-ndk-r19c 
+#android.ndk_path =
 
 # (str) Android SDK directory (if empty, it will be automatically downloaded.)
-android.sdk_path = /home/camcz/.buildozer/android/platform/android-sdk
+#android.sdk_path =
 
 # (str) ANT directory (if empty, it will be automatically downloaded.)
-android.ant_path = /home/camcz/.buildozer/android/platform/apache-ant-1.9.4
+#android.ant_path =
 
 # (bool) If True, then skip trying to update the Android sdk
 # This can be useful to avoid excess Internet downloads or save time
@@ -202,7 +202,7 @@ android.skip_update = True
 
 # (bool) Indicate whether the screen should stay on
 # Don't forget to add the WAKE_LOCK permission if you set this to True
-#android.wakelock = True
+android.wakelock = True
 
 # (list) Android application meta-data to set (key=value format)
 #android.meta_data =
@@ -241,7 +241,7 @@ android.arch = armeabi-v7a
 p4a.source_dir = /home/camcz/p38k200/python-for-android
 
 # (str) The directory in which python-for-android should look for your own build recipes (if any)
-#p4a.local_recipes = 
+#p4a.local_recipes =
 
 # (str) Filename to the hook for p4a
 #p4a.hook =
