@@ -36,7 +36,7 @@ class LoginScreen(MDScreen):
     def login_button_action(self):    
 ##        try:
 ##            #establish connection to db
-##            conn = mysql.connector.connect(user='first-instance',password='Camacazzi@1', host='35.238.227.250', database='eee599')
+##            conn = mysql.connector.connect(user='<username>',password='<password>', host='<host address>', database='<db name>')
 ##            #create a cursor object using the cursor() method
 ##            cursor = conn.cursor()
 ##      
@@ -105,7 +105,7 @@ class HomeScreen(MDScreen):
         if course_code != '':
             #check if course is in the system
             try:
-                conn = mysql.connector.connect(user='first-instance',password='Camacazzi@1', host='35.238.227.250', database='eee599')
+                conn = mysql.connector.connect(user='<username>',password='<password>', host='<host address>', database='<db name>')
                 print("connected!")
                 cursor = conn.cursor()
                 cursor.execute("SELECT * FROM course_tbl")
@@ -132,7 +132,7 @@ class HomeScreen(MDScreen):
         # if course_code != '':
         #     #check if course is in the system
         #     try:
-        #         conn = mysql.connector.connect(user='first-instance',password='Camacazzi@1', host='34.134.55.131', database='eee599')
+        #         conn = mysql.connector.connect(user='<username>',password='<password>', host='<host address>', database='<db name>')
         #         print("connected!")
         #         cursor = conn.cursor()
         #         cursor.execute("SELECT * FROM course_tbl")
@@ -202,7 +202,7 @@ class CovidContactsScreen(MDScreen):
         cov_date = self.in_class3.text
         stu_id = self.in_class4.text
 
-        conn = mysql.connector.connect(user='first-instance',password='Camacazzi@1', host='35.238.227.250', database='eee599')
+        conn = mysql.connector.connect(user='<username>',password='<password>', host='<host address>', database='<db name>')
         cursor = conn.cursor()
 
         #get name and surname of the student whose contacts we want
@@ -263,7 +263,7 @@ class ClassAttScreen(MDScreen):
     def classList_button_action(self):
         # file with details on the class attendacne
         # conn to db-----------
-        conn = mysql.connector.connect(user='first-instance',password='Camacazzi@1', host='35.238.227.250', database='eee599')
+        conn = mysql.connector.connect(user='<username>',password='<password>', host='<host address>', database='<db name>')
         print("connected:....")
 
         #create a cursor object using the cursor() method
