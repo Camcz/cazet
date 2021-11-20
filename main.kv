@@ -69,15 +69,31 @@
         left_action_items: [["arrow-left",lambda x: root.backbtn()]]
         right_action_items: [["home",lambda x: root.menu_action()]]
 
-    MDRectangleFlatButton:
+    MDLabel:
+        text: 'Choose Report Type:'
+        theme_text_color: "Custom"
+        text_color: 0, 0, 1, 1
+        halign: 'center'
+        pos_hint: {'center_x': .5, 'center_y': .8}
+
+    MDFillRoundFlatButton:
     	text: 'Class Attendance'
         on_release: root.classAtt_button_action()
-        pos_hint: {'center_x': .5,'center_y': .7}
+        pos_hint: {'center_x': .5,'center_y': .6}
 
-    MDRectangleFlatButton:
+    MDFillRoundFlatButton:
         text: 'Covid Contacts'
         on_release: root.covContacts_button_action()
-        pos_hint: {'center_x': .5,'center_y': .5}
+        pos_hint: {'center_x': .5,'center_y': .4}
+
+
+    MDLabel:
+        text: 'Select class attendance to get reports related to students attendance\nSelect covid contacts for covid contacts report'
+        font_style: 'Body2'
+        theme_text_color: "Custom"
+        text_color: .7, .5, .5, .7
+        halign: 'center'
+        pos_hint: {'center_x': .5, 'center_y': .2}
 
 <covidContactsScreen>:
     orientation: 'vertical'
@@ -89,39 +105,53 @@
         title: 'Covid Contacts'
         left_action_items: [["arrow-left",lambda x: root.backbtn()]]
         right_action_items: [["home",lambda x: root.menu_action()]]
+    MDLabel:
+        text: 'Enter the student ID and date on which the student whose contacts are required was present'
+        font_style: 'Body2'
+        theme_text_color: "Custom"
+        text_color: 0, 0, 1, 1
+        halign: 'center'
+        pos_hint: {'center_x': .5, 'center_y': .8}
     MDTextField:
         hint_text: "Date"
         helper_text: "in the format: YYYY-MM-DD"
         helper_text_mode: "on_focus"
         id: c_date
         size_hint_x:.8
-        pos_hint: {'center_x': .5,'center_y': .8}
+        pos_hint: {'center_x': .5,'center_y': .7}
     MDTextField:
         hint_text: "Student ID"
         id: stid
         size_hint_x:.8
-        pos_hint: {'center_x': .5,'center_y': .7}    
-    MDRectangleFlatButton:
-        text: 'go'
+        pos_hint: {'center_x': .5,'center_y': .6}    
+    MDFillRoundFlatButton:
+        text: 'Save Report'
         on_release: root.go_button_action()
         pos_hint: {'center_x': .5,'center_y': .4}
             
 <classAttScreen>:
     orientation: 'vertical'
 
+    
+    MDLabel:
+        text: 'Select attendance report'
+        theme_text_color: "Custom"
+        text_color: 0, 0, 1, 1
+        halign: 'center'
+        pos_hint: {'center_x': .5, 'center_y': .8}
     MDToolbar:
         pos_hint: {'top':1.0}
         title: 'Class Attendance'
         left_action_items: [["arrow-left",lambda x: root.backbtn()]]
         right_action_items: [["home",lambda x: root.menu_action()]]
-    MDRectangleFlatButton:
+    MDFillRoundFlatButton:
         text: 'Class list'
         on_press: root.classList_button_action()
-        pos_hint: {'center_x': .5,'center_y': .7}
+        pos_hint: {'center_x': .5,'center_y': .6}
     MDRectangleFlatButton:
-        text: 'Individual list'
+        text: 'Individual report'
         on_release: root.individualList_button_action()
-        pos_hint: {'center_x': .5,'center_y': .5}
+        pos_hint: {'center_x': .5,'center_y': .4}
 
 <individualRepScreen>:
     orientation: 'vertical'
@@ -140,7 +170,7 @@
         id: studentid
         pos_hint: {'center_x': .5,'center_y': .7}
         icon_left: "magnify"
-    MDRectangleFlatButton:
+    MDFillRoundFlatButton:
         text: 'view report'
         on_release: root.vwrpt_button_action()
-        pos_hint: {'center_x': .5,'center_y': .4}
+        pos_hint: {'center_x': .5,'center_y': .6}
