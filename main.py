@@ -334,7 +334,7 @@ class AttendanceScreen(MDScreen):
         #-----------end nfc section------------
 ##------------test attendance db----------------------------------------
 #         try: #for handling case of connection problems
-#             conn = mysql.connector.connect(user='first-instance',password='Camacazzi@1', host='35.238.227.250', database='eee599')
+#             conn = mysql.connector.connect(user='<username>',password='<password>', host='<host address>', database='<db name>')
 
 #             print("connected:....")
 
