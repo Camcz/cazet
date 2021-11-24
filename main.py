@@ -62,6 +62,7 @@ Builder.load_string("""
     orientation: 'vertical'
     in_class2: studentname
     in_class3: studentsurname
+    in_class4: phonenum
     MDToolbar:
         pos_hint: {'top':1.0}
         title: 'Register'
@@ -94,10 +95,15 @@ Builder.load_string("""
         id: studentsurname
         size_hint_x: .9
         pos_hint:{'center_x': .5, 'center_y': .5}
+    MDTextField:
+        hint_text: "Enter cellphone number"
+        id: phonenum
+        size_hint_x: .9
+        pos_hint:{'center_x': .5, 'center_y': .4}
     MDFillRoundFlatButton:
         text: 'Done'
         on_release: root.regDone_button_action()
-        pos_hint:{'center_x': .5, 'center_y': .3}
+        pos_hint:{'center_x': .5, 'center_y': .2}
                 
 <attendanceScreen>:
     orientation: 'vertical'
@@ -196,8 +202,8 @@ class HomeScreen(MDScreen):
         #ensuring st id is not empty **also add other restrictions**
         global st_id_input
         st_id_input = self.in_class.text
-        if st_id_input == '':  #if st id field is empty
-            self.snackbar = Snackbar(text="Student ID cannot be empty!!", font_size='15sp')
+        if st_id_input == '' or course_code_input=='':  #if st id field is empty
+            self.snackbar = Snackbar(text="Fields cannot be empty!!", font_size='15sp')
             self.snackbar.open()
             self.manager.current = 'Home'
         else:
@@ -228,6 +234,7 @@ class RegisterScreen(MDScreen):
         
     in_class2 = ObjectProperty(None)
     in_class3 = ObjectProperty(None)
+    in_class4 = ObjectProperty(None)
     
     def regDone_button_action(self):
         global bbflag
@@ -235,10 +242,13 @@ class RegisterScreen(MDScreen):
 
         #name and surname to be used when adding student to database
         global name_input
-        name_input = self.in_class2.text,upper()
+        name_input = self.in_class2.text.upper()
 
         global surname_input
         surname_input = self.in_class3.text.upper()
+
+        global phone_input
+        phone_input = self.in_class4.text
         
         self.manager.current = 'Attendance'
         #validate details and if correct (if wrong start afresh after beaming)
@@ -306,108 +316,113 @@ class AttendanceScreen(MDScreen):
         global bbflag #for back button
         bbflag = 0
 
-        #-----------nfc section----------------
-       server = None
+       #  #-----------nfc section----------------
+       # server = None
        
-       def send_ndef_message(llc):
-           txt_record = ndef.TextRecord('hello world')
-           nfc.snep.SnepClient(llc).put_records( [txt_record] )
+       # def send_ndef_message(llc):
+       #     txt_record = ndef.TextRecord('hello world')
+       #     nfc.snep.SnepClient(llc).put_records( [txt_record] )
            
-       def startup(clf, llc): #create server to accept and discard put requests from peer
-           global server
-           server = nfc.snep.SnepServer(llc, "urn:nfc:sn:snep")
-           return llc
+       # def startup(clf, llc): #create server to accept and discard put requests from peer
+       #     global server
+       #     server = nfc.snep.SnepServer(llc, "urn:nfc:sn:snep")
+       #     return llc
        
-       def connected(llc):
-           server.start()
-           threading.Thread(target=send_ndef_message, args=(llc,)).start()
-           return True
+       # def connected(llc):
+       #     server.start()
+       #     threading.Thread(target=send_ndef_message, args=(llc,)).start()
+       #     return True
        
-       clf = nfc.ContactlessFrontend("udp")
-       clf.connect(llcp={'on-startup': startup, 'on-connect': connected})
-       self.manager.current = 'StartBeam'       #may go to beaming screen or use snackbar(s)
+       # clf = nfc.ContactlessFrontend("udp")
+       # clf.connect(llcp={'on-startup': startup, 'on-connect': connected})
+       # self.manager.current = 'StartBeam'       #may go to beaming screen or use snackbar(s)
 
-       except:
-           self.manager.current='Attendance'
-           Snackbar(text="TypeError: startup() missing 1 required positional argument: 'llc'", font_size='10sp').show()
+       # except:
+       #     self.manager.current='Attendance'
+       #     Snackbar(text="TypeError: startup() missing 1 required positional argument: 'llc'", font_size='10sp').show()
 
         #-----------end nfc section------------
 ##------------test attendance db----------------------------------------
-#         try: #for handling case of connection problems
-#             conn = mysql.connector.connect(user='<username>',password='<password>', host='<host address>', database='<db name>')
+        try: #for handling case of connection problems
+            conn = mysql.connector.connect(user='<user>',password='<password>', host='<host>', database='<db>')
 
-#             print("connected:....")
+            print("connected:....")
 
-#             #create a cursor object using the cursor() method
+            #create a cursor object using the cursor() method
 
-#             cursor = conn.cursor()
+            cursor = conn.cursor()
 
 
-#             today = date.today()
-#             now = datetime.now().time()
-#             #insert data into db (if register way was taken)
-#             sql = '''INSERT INTO eee599.attendance_tbl(DATE,TIME,STUDENT_ID,COURSE_CODE,FEVER,DIFF_BREATHING,HEADACHE,CHEST_PAINS,ANXIETY,LOSS_APPETITE)
-#                      VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'''
-#             data = (today,now,st_id_input,course_code_input,covid_symptoms[0],covid_symptoms[1],covid_symptoms[3],covid_symptoms[2],covid_symptoms[5],covid_symptoms[4])
+            today = date.today()
+            now = datetime.now().time()
+            #insert data into db (if register way was taken)
+            sql = '''INSERT INTO eee599.attendance_tbl(DATE,TIME,STUDENT_ID,COURSE_CODE,FEVER,DIFF_BREATHING,HEADACHE,CHEST_PAINS,ANXIETY,LOSS_APPETITE)
+                     VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'''
+            data = (today,now,st_id_input,course_code_input,covid_symptoms[0],covid_symptoms[1],covid_symptoms[3],covid_symptoms[2],covid_symptoms[5],covid_symptoms[4])
 
-#             #retrieving data from table
-#             cursor.execute("SELECT ST_ID FROM student_tbl")
-#             result1 = cursor.fetchall();
+            #retrieving data from table
+            cursor.execute("SELECT ST_ID FROM student_tbl")
+            result1 = cursor.fetchall();
+            print(result1)
                         
-#             try:
-#                 for j in range(len(result1)):
-#                     if st_id_input == str(result1[j][0]):
-#                         # Executing the SQL command
-#                         cursor.execute(sql,data)
-#                         print('Data inserted to attendance DB...')
-#                         toast('Attendance taken')
-#                         self.manager.current = 'StartBeam'
-#                         break
+            try:
+                for j in range(len(result1)):
+                    if st_id_input == str(result1[j][0]):
+                        # Executing the SQL command
+                        cursor.execute(sql,data)
+                        print('Data inserted to attendance DB...')
+                        toast('Attendance taken')
+                        self.manager.current = 'StartBeam'
+                        bbflag=3
+                        break                
+                    else: 
+                        print('here')
+                        bbflag=2
                         
-#                 if st_id_input != str(result1[j][0]):
-#                     if bflag!=1:
-#                         toast('Not Registered, Please select Register')
-#                     self.manager.current = 'Home'                                         
-#                 # Commit your changes in the database
-#                 conn.commit()
-# ##                if bflag == 0:
-# ##                    self.manager.current = 'StartBeam'
-                
+                #if st_id_input != str(result1[j][0]):
+                if bbflag==2:
+                    self.manager.current = 'Home'
+                    if bflag!=1:
+                        toast('Not Registered, Please select Register')                                         
+                # Commit your changes in the database
+                conn.commit()
+##                if bflag == 0:
+##                    self.manager.current = 'StartBeam'
+            except:
+            # Rolling back in case of error
+                conn.rollback()
+                toast('Check if information entered is correct...')
+                print('Data NOT inserted to DB...')
+
+            if bflag == 1: #register selected    
+                try:
+                    print('trying conn to student_tbl')
+                    sql1 = '''INSERT INTO eee599.student_tbl(ST_ID,ST_NAME,ST_SURNAME,PHONE_NUM)
+                        VALUES(%s,%s,%s,%s)'''
+                    data1 = (st_id_input,name_input,surname_input,int(phone_input))
                     
-#             except:
-#             # Rolling back in case of error
-#                 conn.rollback()
-#                 print('Data NOT inserted to DB...')
+                    cursor.execute(sql1,data1)
+                    conn.commit()
+                    print('data inserted to student tbl')
+                    toast('Registration Successful!!\nAttendance taken...')
+                    self.manager.current = 'StartBeam'
 
-#             if bflag == 1: #register selected    
-#                 try:
-#                     print('trying conn to student_tbl')
-#                     sql1 = '''INSERT INTO eee599.student_tbl(ST_ID,ST_NAME,ST_SURNAME)
-#                         VALUES(%s,%s,%s)'''
-#                     data1 = (st_id_input,name_input,surname_input)
-                    
-#                     cursor.execute(sql1,data1)
-#                     conn.commit()
-#                     print('data inserted to student tbl')
-#                     toast('Registration Successful!!\nAttendance taken...')
-#                     self.manager.current = 'StartBeam'
-
-#                 except mysql.connector.Error as err:
-#                     print('except mode')
-#                     message = err.msg
-#                     conn.rollback()
-#                     self.manager.current = 'Home'
-#                     toast(message+"\nCheck info again or\nSelect different option")
+                except mysql.connector.Error as err:
+                    print('except mode')
+                    message = err.msg
+                    conn.rollback()
+                    self.manager.current = 'Home'
+                    toast(message+"\nCheck info again or\nSelect different option")
                         
-#             #execute comands for adding student to course database if first time
+            #execute comands for adding student to course database if first time
                 
-#             #closing the conection
+            #closing the conection
 
-#             conn.close()
+            conn.close()
             
-#         except:
-#             toast("CHECK CONNECTION....")
-#             self.manager.current = 'Home'
+        except:
+            toast("CHECK CONNECTION....")
+            self.manager.current = 'Home'
 ##------------end test of db (delete once able to send using NFC)-------    
         
         
