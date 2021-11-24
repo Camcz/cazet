@@ -44,7 +44,7 @@ class LoginScreen(MDScreen):
         else:
             try:
                #establish connection to db
-               conn = mysql.connector.connect(user='<user>',password='<password>', host='<host>', database='<db>')
+               conn = mysql.connector.connect(user='root',password='Camacazzi@1', host='34.66.202.249', database='eee599')
                #create a cursor object using the cursor() method
                cursor = conn.cursor()
 
@@ -112,7 +112,7 @@ class HomeScreen(MDScreen):
         if course_code != '':
             #check if course is in the system
             try:
-                conn = mysql.connector.connect(user='<user>',password='<password>', host='<host>', database='<db>')
+                conn = mysql.connector.connect(user='root',password='Camacazzi@1', host='34.66.202.249', database='eee599')
                 print("connected!")
                 cursor = conn.cursor()
                 cursor.execute("SELECT * FROM course_tbl")
@@ -139,7 +139,7 @@ class HomeScreen(MDScreen):
         if course_code != '':
             #check if course is in the system
             try:
-                conn = mysql.connector.connect(user='<user>',password='<password>', host='<host>', database='<db>')
+                conn = mysql.connector.connect(user='root',password='Camacazzi@1', host='34.66.202.249', database='eee599')
                 print("connected!")
                 cursor = conn.cursor()
                 cursor.execute("SELECT * FROM course_tbl")
@@ -213,62 +213,59 @@ class CovidContactsScreen(MDScreen):
             toast('please fill in all the information')
             self.manager.current = 'CovidContacts'
         else:
-            # try:
-            conn = mysql.connector.connect(user='<user>',password='<password>', host='<host>', database='<db>')
-            cursor = conn.cursor()
+            try:
+                conn = mysql.connector.connect(user='root',password='Camacazzi@1', host='34.66.202.249', database='eee599')
+                cursor = conn.cursor()
 
-            #get name and surname of the student whose contacts we want
-            sql = "SELECT ST_NAME,ST_SURNAME FROM student_tbl WHERE ST_ID=%s"
-            data = (stu_id,)
-            cursor.execute(sql,data)
-            this_student = cursor.fetchall()
-            print(this_student)
-            f = open(os.path.join(document_dir_path,str(stu_id)+'-contacts'+str(date_only.today())+'.csv'),'w') 
-            # f = open(str(stu_id)+'-contacts.csv','w')
+                #get name and surname of the student whose contacts we want
+                sql = "SELECT ST_NAME,ST_SURNAME FROM student_tbl WHERE ST_ID=%s"
+                data = (stu_id,)
+                cursor.execute(sql,data)
+                this_student = cursor.fetchall()
+                print(this_student)
+                f = open(os.path.join(document_dir_path,str(stu_id)+'-contacts'+str(date_only.today())+'.csv'),'w') 
+                # f = open(str(stu_id)+'-contacts.csv','w')
 
-            #get student ids for other students on that day, that went to same course(s) as this student
-            #get courses this student went to 
-            sql1 = "SELECT COURSE_CODE FROM attendance_tbl WHERE STUDENT_ID=%s AND DATE='"+cov_date+"'"
-            cursor.execute(sql1,data)
-            this_courses = cursor.fetchall()
-            print(this_courses)
-            f.write('COVID CONTACTS OF:,'+str(this_student[0][0])+' '+str(this_student[0][1])+'\nDATE:,'+cov_date+'\n\n')
+                #get student ids for other students on that day, that went to same course(s) as this student
+                #get courses this student went to 
+                sql1 = "SELECT COURSE_CODE FROM attendance_tbl WHERE STUDENT_ID=%s AND DATE='"+cov_date+"'"
+                cursor.execute(sql1,data)
+                this_courses = cursor.fetchall()
+                print(this_courses)
+                f.write('COVID CONTACTS OF: '+str(this_student[0][0])+' '+str(this_student[0][1])+'\nDATE: '+cov_date+'\n\n')
 
-            for course in this_courses:
-                print('list of students in {} on {} is: '.format(course[0],cov_date))
-                f.write('LIST OF CONTACTS IN:, {} CLASS\n\n'.format(course[0]))
-                f.write('ID,SURNAME,NAME,PHONE NUMBER\n')
-                sql2 = "SELECT STUDENT_ID FROM attendance_tbl WHERE DATE=%s AND COURSE_CODE=%s"
-                data2 = (cov_date,course[0],)
-                cursor.execute(sql2,data2)
-                st = cursor.fetchall() #student ids 
-                for s in st:
-                    print('ID is: ',str(s),end=" ")
-                    #find the name and surname of the student with this id
-                    sql3 = "SELECT ST_NAME,ST_SURNAME,PHONE_NUM FROM student_tbl WHERE ST_ID=%s"
-                    data3 = (s[0],)
-                    cursor.execute(sql3,data3)
-                    details = cursor.fetchall()
-                    print(details) #display student name and surname
-                    if s[0]==stu_id: #exclude this student from the list
-                        continue
-                    try: 
-                        f.write(str(s[0])+','+details[0][1]+','+details[0][0]+','+str(details[0][2])+'\n')
-                    except:
-                        toast('The list is empty.')   
-            f.close()
-            #close db connection
-            conn.close()
+                for course in this_courses:
+                    print('list of students in {} on {} is: '.format(course[0],cov_date))
+                    f.write('LIST OF CONTACTS IN:, {} CLASS\n\n'.format(course[0]))
+                    f.write('ID,SURNAME,NAME,PHONE NUMBER\n')
+                    sql2 = "SELECT STUDENT_ID FROM attendance_tbl WHERE DATE=%s AND COURSE_CODE=%s"
+                    data2 = (cov_date,course[0],)
+                    cursor.execute(sql2,data2)
+                    st = cursor.fetchall() #student ids 
+                    for s in st:
+                        print('ID is: ',str(s),end=" ")
+                        #find the name and surname of the student with this id
+                        sql3 = "SELECT ST_NAME,ST_SURNAME,PHONE_NUM FROM student_tbl WHERE ST_ID=%s"
+                        data3 = (s[0],)
+                        cursor.execute(sql3,data3)
+                        details = cursor.fetchall()
+                         #display student name and surname
+                        if s[0]!=int(stu_id): #exclude this student from the list
+                            print(details)
+                            f.write(str(s[0])+','+details[0][1]+','+details[0][0]+','+str(details[0][2])+'\n')   
+                f.close()
+                #close db connection
+                conn.close()
 
             # access DB search for the date and bring back data
             #if date in db is same as entered date
             #fetch where course and date match with the courses attended
             #by the student on that day
             # data to be output in a file (*.csv or *.txt) or as a list
-            toast('Report saved to covid_contacts'+str(date_only.today())+'.csv')
-            # except:
-            #     toast('solve possible problems:\nCheck connection and format of information\nthen try again...')
-            #     self.manager.current = 'CovidContacts'
+                toast('Report saved to covid_contacts'+str(date_only.today())+'.csv')
+            except:
+                toast('solve possible problems:\nCheck connection and format of information\nthen try again...')
+                self.manager.current = 'CovidContacts'
         
 class ClassAttScreen(MDScreen):
     #menu and back arrow
@@ -286,7 +283,7 @@ class ClassAttScreen(MDScreen):
         # conn to db-----------
         try:
 
-            conn = mysql.connector.connect(user='<user>',password='<password>', host='<host>', database='<db>')
+            conn = mysql.connector.connect(user='root',password='Camacazzi@1', host='34.66.202.249', database='eee599')
             print("connected:....")
 
             #create a cursor object using the cursor() method
@@ -424,11 +421,44 @@ class IndividualRepScreen(MDScreen):
     #--------
     
     def vwrpt_button_action(self):
+        in_class5 = ObjectProperty(None)
+        stuid = self.in_class5.text
     #Then come here!!!
         #brings screen with detailed report in individual
         #have option for exporting report into a file
         #file may be used by instructor in the student file
-        toast("snackbar with information displayed\nwith two buttons\nclose and save")
+        try:
+            conn = mysql.connector.connect(user='root',password='Camacazzi@1', host='34.66.202.249', database='eee599')
+            print("connected:....")
+
+            #create a cursor object using the cursor() method
+            cursor = conn.cursor()
+            
+            # fetch info and store in respective memory
+            cursor.execute("SELECT DATE,COURSE_CODE,STUDENT_ID FROM attendance_tbl")
+            res = cursor.fetchall()
+
+            det = []
+            count = 0 #counter for number of times course offered
+            for i in range(len(res)):
+                if i==0 and res[i][1]==course_code.upper():
+                    det.append(res[i][0])
+                    count +=1
+                elif det[-1]!=res[i][0] and res[i][1]==course_code.upper():
+                    det.append(res[i][0])
+                    count+=1
+            bal=0
+            ndet =[]
+            for j in range(len(res)):
+                if j==0 and res[i][1]==course_code.upper():
+                    ndet.append(res[j][0])
+                    bal +=1
+                if ndet[-1]!=res[j][0] and res[j][2]==int(stuid) and res[i][1]==course_code.upper():
+                    ndet.append(res[j][0])
+                    bal+=1
+            Snackbar(text="Number of classes = {}\nNumber of times student attended = {}".format(count,bal)).open()
+        except: 
+            toast('possible connection problems')
 
 class MainApp(MDApp):
     # Window.size = (400,600)
