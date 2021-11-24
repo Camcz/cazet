@@ -214,7 +214,7 @@ class HomeScreen(MDScreen):
         bflag = 1
 
         global course_code_input
-        course_code_input = self.in_classa.text
+        course_code_input = self.in_classa.text.upper()
         #str(course_code_input).upper() #cater for small letters
          
         global st_id_input
@@ -344,7 +344,7 @@ class AttendanceScreen(MDScreen):
         #-----------end nfc section------------
 ##------------test attendance db----------------------------------------
         try: #for handling case of connection problems
-            conn = mysql.connector.connect(user='<user>',password='<password>', host='<host>', database='<db>')
+            conn = mysql.connector.connect(user='root',password='Camacazzi@1', host='34.66.202.249', database='eee599')
 
             print("connected:....")
 
@@ -371,7 +371,7 @@ class AttendanceScreen(MDScreen):
                         # Executing the SQL command
                         cursor.execute(sql,data)
                         print('Data inserted to attendance DB...')
-                        toast('Attendance taken')
+                        toast('Already registered\nAttendance taken')
                         self.manager.current = 'StartBeam'
                         bbflag=3
                         break                
@@ -402,6 +402,7 @@ class AttendanceScreen(MDScreen):
                     data1 = (st_id_input,name_input,surname_input,int(phone_input))
                     
                     cursor.execute(sql1,data1)
+                    cursor.execute(sql,data)
                     conn.commit()
                     print('data inserted to student tbl')
                     toast('Registration Successful!!\nAttendance taken...')
@@ -411,8 +412,8 @@ class AttendanceScreen(MDScreen):
                     print('except mode')
                     message = err.msg
                     conn.rollback()
-                    self.manager.current = 'Home'
-                    toast(message+"\nCheck info again or\nSelect different option")
+                    self.manager.current = 'StartBeam'
+                    # toast(message+"\nAttendance Rollback executed\nCheck info again or\nSelect different option")
                         
             #execute comands for adding student to course database if first time
                 
